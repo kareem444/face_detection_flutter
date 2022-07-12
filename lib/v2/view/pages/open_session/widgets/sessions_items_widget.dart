@@ -12,11 +12,9 @@ class SessionsItemsWidget extends StatelessWidget {
   const SessionsItemsWidget({
     Key? key,
     required this.sessions,
-    required this.reload,
   }) : super(key: key);
 
   final List<QueryDocumentSnapshot<Object?>> sessions;
-  final Function() reload;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,6 @@ class SessionsItemsWidget extends StatelessWidget {
                 BottomSheetService.enterSessionCode(
                   context,
                   sessionModel,
-                  reload,
                 );
               }
             },

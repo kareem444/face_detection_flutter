@@ -27,10 +27,6 @@ class _OpenSessionsPageState extends State<OpenSessionsPage> {
     CollectionReference sessions =
         FirebaseFirestore.instance.collection('sessions');
 
-    void reload() {
-      setState(() {});
-    }
-
     return CreatePageWidget(
         page: Center(
       child: Container(
@@ -60,7 +56,6 @@ class _OpenSessionsPageState extends State<OpenSessionsPage> {
                       snapshot.data!.docs;
                   return SessionsItemsWidget(
                     sessions: sessions,
-                    reload: reload,
                   );
                 }
 

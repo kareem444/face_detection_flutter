@@ -9,6 +9,8 @@ import 'package:face_recongantion/v2/controller/auth_provider.dart';
 import 'package:face_recongantion/v2/controller/loading_widget_provider.dart';
 import 'package:face_recongantion/v2/controller/session_provider.dart';
 import 'package:face_recongantion/v2/service/user_service.dart';
+import 'package:face_recongantion/v2/view/pages/check_your_data/check_your_data_page.dart';
+import 'package:face_recongantion/v2/view/pages/register_attendence_finished/register_attendence_finished_page.dart';
 import 'package:face_recongantion/v2/view/pages/lecture_location/lecture_location_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,6 +59,7 @@ class SessionService {
   }
 
   static addStudentToSession(BuildContext context, sessionId) async {
+    context.read<LoadingWidgetProvidre>().handelLoadingScreen(true);
     try {
       await SessionRepo.updateSession(
         sessionId,
@@ -70,6 +73,7 @@ class SessionService {
         text: "Success joing session",
         color: Colors.green,
       );
+      Get.off(() => const RegisterAttendenceFinishedPage());
     } catch (e) {
       FeedBackWidgetsHelper.snakeBar(
         context: context,
@@ -77,6 +81,7 @@ class SessionService {
         color: Colors.red,
       );
     }
+    context.read<LoadingWidgetProvidre>().handelLoadingScreen(false);
   }
 
   static removeStudentFromSession(
@@ -132,20 +137,21 @@ class SessionService {
     Get.back();
   }
 
-  static handelEnterSessionCode(BuildContext context, SessionModel sessionModel,
-      String code, Function() reload) async {
+  static handelEnterSessionCode(
+      BuildContext context, SessionModel sessionModel, String code) async {
     if (sessionModel.sessionCode == code) {
       context.read<SessionProvider>().setIsWrongEnterSessionCode(false);
       context.read<SessionProvider>().setIsLoadingSession(true);
       context.read<LoadingWidgetProvidre>().handelLoadingScreen(true);
       final response = await UserService.checkIfUserExistOnServer(context);
+      Get.back();
+      context.read<LoadingWidgetProvidre>().handelLoadingScreen(false);
+      context.read<SessionProvider>().setIsLoadingSession(false);
       if (response != null && response) {
-        await addStudentToSession(context, sessionModel.sessionId);
-        FeedBackWidgetsHelper.snakeBar(
-          context: context,
-          text: "Success joing session",
-          color: Colors.green[700],
-        );
+        Get.to(() => CheckYourDatapPage(
+              isRegister: false,
+              sessionModel: sessionModel,
+            ));
       } else {
         FeedBackWidgetsHelper.snakeBar(
           context: context,
@@ -153,10 +159,6 @@ class SessionService {
           color: Colors.red[700],
         );
       }
-      reload();
-      Get.back();
-      context.read<LoadingWidgetProvidre>().handelLoadingScreen(false);
-      context.read<SessionProvider>().setIsLoadingSession(false);
     } else {
       context.read<SessionProvider>().setIsWrongEnterSessionCode(true);
     }

@@ -1,5 +1,11 @@
+import 'package:face_recongantion/v2/service/session_service.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
 import 'package:face_recongantion/v1/modules/studentorlecturer/lecturer_student.dart';
 import 'package:face_recongantion/v2/controller/auth_provider.dart';
+import 'package:face_recongantion/v2/models/session_model.dart';
 import 'package:face_recongantion/v2/models/user_model.dart';
 import 'package:face_recongantion/v2/service/user_service.dart';
 import 'package:face_recongantion/v2/view/pages/check_your_data/widgets/check_your_data_header_widget.dart';
@@ -8,16 +14,22 @@ import 'package:face_recongantion/v2/view/pages/check_your_data/widgets/info_wid
 import 'package:face_recongantion/v2/view/widgets/button_widget.dart';
 import 'package:face_recongantion/v2/view/widgets/create_page_widget.dart';
 import 'package:face_recongantion/v2/view/widgets/spacer_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class CheckYourDatapPage extends StatelessWidget {
-  const CheckYourDatapPage({Key? key}) : super(key: key);
+  const CheckYourDatapPage({
+    Key? key,
+    required this.isRegister,
+    this.sessionModel,
+  }) : super(key: key);
+
+  final bool isRegister;
+  final SessionModel? sessionModel;
 
   @override
   Widget build(BuildContext context) {
-    UserModel? usermodel = context.watch<AuthProvider>().newUserInfo;
+    UserModel? usermodel = isRegister
+        ? context.watch<AuthProvider>().newUserInfo
+        : context.watch<AuthProvider>().currentUser;
     return CreatePageWidget(
       page: ListView(
         children: [
@@ -25,6 +37,7 @@ class CheckYourDatapPage extends StatelessWidget {
             const CheckYourDataHeaderWidget(),
             CheckYourDataProfileImageWidget(
               userModel: usermodel,
+              isFile: isRegister ? true : false,
             ),
             const SpacerWidget(),
             CheckYourDataInfoWidget(
@@ -37,12 +50,19 @@ class CheckYourDatapPage extends StatelessWidget {
                     height: 20,
                   ),
                   ButtonWidget(
-                    text: "Register Attendance",
+                    text: isRegister ? "Continue" : "Register Attendance",
                     buttonWidth: 1.4,
                     buttonColor: Colors.orange[400],
                     textColor: Colors.black54,
                     textSize: 22,
-                    onPress: () => UserService.rgisterStudent(context),
+                    onPress: () {
+                      if (isRegister) {
+                        UserService.rgisterStudent(context);
+                      } else if (!isRegister && sessionModel != null) {
+                        SessionService.addStudentToSession(
+                            context, sessionModel?.sessionId);
+                      }
+                    },
                   ),
                   const SpacerWidget(
                     height: 20,
@@ -53,7 +73,13 @@ class CheckYourDatapPage extends StatelessWidget {
                     textColor: Colors.black87,
                     transparent: true,
                     textSize: 22,
-                    onPress: () => Get.offAll(ChooseBetween()),
+                    onPress: () {
+                      if (isRegister) {
+                        Get.offAll(ChooseBetween());
+                      } else {
+                        Get.back();
+                      }
+                    },
                   ),
                   const SpacerWidget(),
                 ],

@@ -10,7 +10,7 @@ class SessionHelper {
   }) async {
     try {
       http.MultipartRequest request = http.MultipartRequest(
-          'POST', Uri.parse("http://acc8-35-227-180-233.ngrok.io/" + url))
+          'POST', Uri.parse("http://e8cd-34-124-187-2.ngrok.io/" + url))
         ..files.add(
           await http.MultipartFile.fromPath(
             'image',

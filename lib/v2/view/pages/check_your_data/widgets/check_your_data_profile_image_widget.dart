@@ -8,9 +8,11 @@ class CheckYourDataProfileImageWidget extends StatelessWidget {
   const CheckYourDataProfileImageWidget({
     Key? key,
     required this.userModel,
+    required this.isFile,
   }) : super(key: key);
 
   final UserModel userModel;
+  final bool isFile;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CheckYourDataProfileImageWidget extends StatelessWidget {
         ),
         ProfileImageWidget(
           imagePath: userModel.image,
-          isFileimage: true,
+          isFileimage: isFile,
           size: 4,
         ),
         const SpacerWidget(

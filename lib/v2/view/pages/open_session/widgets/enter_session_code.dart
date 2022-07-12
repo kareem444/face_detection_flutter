@@ -12,11 +12,9 @@ class EnterSessionCode extends StatelessWidget {
   const EnterSessionCode({
     Key? key,
     required this.sessionModel,
-    required this.reload,
   }) : super(key: key);
 
   final SessionModel sessionModel;
-  final Function() reload;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +77,7 @@ class EnterSessionCode extends StatelessWidget {
                 textBold: true,
                 onPress: () {
                   SessionService.handelEnterSessionCode(
-                      context, sessionModel, codeController.text, reload);
+                      context, sessionModel, codeController.text);
                 },
               ),
               const SpacerWidget(

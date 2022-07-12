@@ -42,7 +42,9 @@ class UserService {
       if (photo != null) {
         context.read<AuthProvider>().handleImagePath(photo.path);
         context.read<AuthProvider>().handleNewUserImageInfo(photo.path);
-        Get.to(() => const CheckYourDatapPage());
+        Get.to(() => const CheckYourDatapPage(
+              isRegister: true,
+            ));
       } else {
         FeedBackWidgetsHelper.snakeBar(
           context: context,

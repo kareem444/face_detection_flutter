@@ -37,7 +37,7 @@ class ButtonWidget extends StatelessWidget {
     return InkWell(
       onTap: onPress,
       child: Container(
-        padding: EdgeInsets.all(buttonBadding ?? 16),
+        padding: EdgeInsets.all(buttonBadding ?? 8),
         width: Get.width / (buttonWidth ?? 3),
         decoration: BoxDecoration(
           boxShadow: [

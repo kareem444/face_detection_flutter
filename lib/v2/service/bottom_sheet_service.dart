@@ -20,7 +20,7 @@ class BottomSheetService {
   }
 
   static enterSessionCode(
-      BuildContext context, SessionModel sessionModel, Function() reload) {
+      BuildContext context, SessionModel sessionModel) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -33,7 +33,6 @@ class BottomSheetService {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: EnterSessionCode(
             sessionModel: sessionModel,
-            reload: reload,
           ),
         );
       },
